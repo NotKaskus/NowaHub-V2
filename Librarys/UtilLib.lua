@@ -170,4 +170,8 @@ function UtilsLib:GetExecutor()
     return exploit
 end
 
+if not getgenv().isUtilsLibLive then 
+    getgenv().isUtilsLibLive = true
+end
+
 return UtilsLib;
