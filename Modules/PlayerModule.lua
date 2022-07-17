@@ -65,7 +65,7 @@ else
 	LocalPlayer.Character:FindFirstChildOfClass('Humanoid').JumpHeight  = ss.JumpPower
 end
 
-LocalPlayer.Character.FindFirstChildOfClass('Humanoid').WalkSpeed = ss.WalkSpeed
+LocalPlayer.Character:FindFirstChildOfClass('Humanoid').WalkSpeed = ss.WalkSpeed
 
 FLYING = false
 QEfly = true
