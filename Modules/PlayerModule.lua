@@ -2,10 +2,10 @@ local PlayerModule = {}
 
 -- // Variables
 local Players = game:GetService("Players")
-local LocalPLayer = Players.LocalPLayer
+local LocalPLayer = game.Players.LocalPLayer
 local UserInputService = game:GetService("UserInputService")
 
-if not getgenv().PlayerModule then {
+if not getgenv().PlayerModule then
 	getgenv().PlayerModule = {
 		WalkSpeed = 16,
 		JumpPower = 50,
@@ -18,7 +18,7 @@ if not getgenv().PlayerModule then {
 			Speed = 1
 		}
 	}
-}
+end
 
 local ss = getgenv().PlayerModule
 
