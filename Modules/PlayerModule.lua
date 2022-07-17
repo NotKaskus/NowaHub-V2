@@ -211,7 +211,7 @@ if ss.Flying.Enabled then
 		wait()
 		sFLY()
 	elseif ss.Flying.Method == "CFrame" then
-		cFLY(Players.LocalPLayer)
+		cFLY(Players.LocalPlayer)
 	elseif ss.Flying.Method == "Jump" then
 		jFLY()
 	end
