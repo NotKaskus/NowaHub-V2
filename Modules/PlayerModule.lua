@@ -2,7 +2,7 @@ local PlayerModule = {}
 
 -- // Variables
 local Players = game:GetService("Players")
-local LocalPLayer = game.Players.LocalPLayer
+local LocalPlayer = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 
 if not getgenv().PlayerModule then
