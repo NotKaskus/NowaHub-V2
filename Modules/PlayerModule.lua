@@ -187,8 +187,8 @@ end
 function cNOFLY()
 	if CFloop then
 		CFloop:Disconnect()
-		speaker.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
-		local Head = speaker.Character:WaitForChild("Head")
+		LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+		local Head = LocalPlayer.Character:WaitForChild("Head")
 		Head.Anchored = false
 	end
 end
