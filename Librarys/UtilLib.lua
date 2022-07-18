@@ -122,8 +122,6 @@ function UtilsLib:Try(func, name, verbose)
     local success, err = pcall(function() func() end)
     if not success and verbose then
         UtilsLib:Log("error", string.format('Function "%s" failed to run, Error: %s', name, err))
-    elseif success and verbose then
-        UtilsLib:Log("info", string.format('Function "%s" ran successfully!', name))
     end
 end
 
