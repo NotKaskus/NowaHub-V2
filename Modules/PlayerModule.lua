@@ -268,11 +268,8 @@ function PlayerModule:FlyMethod(method)
 end
 
 function PlayerModule:FlySpeed(Value)
-	if FlyMethod == "Normal" then
-		iyflyspeed = Value
-	elseif FlyMethod == "CFrame" then
-		CFspeed = Value
-	end
+	iyflyspeed = Value
+	CFspeed = Value
 end
 
 PlayerModule.Functions = {}
