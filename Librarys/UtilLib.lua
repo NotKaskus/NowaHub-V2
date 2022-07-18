@@ -1,7 +1,14 @@
-local orionRepo = 'https://raw.githubusercontent.com/shlexware/Orion/main/'
-local OrionLib = loadstring(game:HttpGet((orionRepo .. 'source')))()
-
 local UtilsLib = {}
+
+local UILibrary
+function UtilsLib:SetLib(library)
+	UILibrary = library
+end
+
+if UILibrary ~= nil then
+	error("Missing Orion Library")
+	return
+end
 
 -- // Version
 UtilsLib.Version = '1.0.0'
@@ -20,21 +27,6 @@ UtilsLib.Humanoid = UtilsLib.Character:FindFirstChild("Humanoid")
 UtilsLib.HRP = UtilsLib.Character:FindFirstChild("HumanoidRootPart")
 UtilsLib.Camera = workspace.CurrentCamera
 UtilsLib.CoreGui = game:GetService("CoreGui")
-UtilsLib.PlayerCount = tostring(#UtilsLib.Players:GetPlayers())
-UtilsLib.FOV = UtilsLib.Camera.FieldOfView
-UtilsLib.UserId = UtilsLib.Player.UserId
-UtilsLib.Mouse = UtilsLib.Player:GetMouse()
-UtilsLib.Displayname = UtilsLib.Player.DisplayName
-UtilsLib.Username = UtilsLib.Player.Name
-UtilsLib.Age = UtilsLib.Player.AccountAge
-UtilsLib.TeamColor = UtilsLib.Player.TeamColor
-if UtilsLib.Humanoid ~= nil then
-    UtilsLib.Health = UtilsLib.Humanoid.Health
-    UtilsLib.State = UtilsLib.Humanoid:GetState()
-    UtilsLib.WalkSpeed = UtilsLib.Humanoid.WalkSpeed
-    UtilsLib.JumpPower = UtilsLib.Humanoid.JumpPower
-    UtilsLib.MaxHealth = UtilsLib.Humanoid.MaxHealth
-end
 
 UtilsLib.Icons = {
 	TabIcons = {
@@ -87,21 +79,6 @@ task.spawn(function()
     UtilsLib.HRP = UtilsLib.Character:FindFirstChild("HumanoidRootPart")
     UtilsLib.Camera = workspace.CurrentCamera
     UtilsLib.CoreGui = game:GetService("CoreGui")
-    UtilsLib.PlayerCount = tostring(#UtilsLib.Players:GetPlayers())
-    UtilsLib.FOV = UtilsLib.Camera.FieldOfView
-    UtilsLib.UserId = UtilsLib.Player.UserId
-    UtilsLib.Mouse = UtilsLib.Player:GetMouse()
-    UtilsLib.Displayname = UtilsLib.Player.DisplayName
-    UtilsLib.Username = UtilsLib.Player.Name
-    UtilsLib.Age = UtilsLib.Player.AccountAge
-    UtilsLib.TeamColor = UtilsLib.Player.TeamColor
-    if UtilsLib.Humanoid ~= nil then
-        UtilsLib.Health = UtilsLib.Humanoid.Health
-        UtilsLib.State = UtilsLib.Humanoid:GetState()
-        UtilsLib.WalkSpeed = UtilsLib.Humanoid.WalkSpeed
-        UtilsLib.JumpPower = UtilsLib.Humanoid.JumpPower
-        UtilsLib.MaxHealth = UtilsLib.Humanoid.MaxHealth
-    end
     -- // Uptime Refresh
     UtilsLib.Uptime.Days = math.floor( elapsedTime() / 86400 )
     UtilsLib.Uptime.Hours = math.floor( elapsedTime() / 3600 )
@@ -112,26 +89,26 @@ task.spawn(function()
 end)
 
 -- // Functions
-local function UtilsLib:Log(type, message, title, time)
+function UtilsLib:Log(type, message, time, title)
     if type == "info" then
-		OrionLib:MakeNotification({
+		UILibrary:MakeNotification({
 			Name = title or "[Utility] INFO: ",
 			Content = tostring(message),
-			Image = UtilsLib.NotificationIcons.Informational,
+			Image = UtilsLib.Icons.NotificationIcons.Informational,
 			Time = tonumber(time) or 5
 		})
     elseif type == "warn" then
-		OrionLib:MakeNotification({
+		UILibrary:MakeNotification({
 			Name = title or "[Utility] WARNING: ",
 			Content = tostring(message),
-			Image = UtilsLib.NotificationIcons.Warning,
+			Image = UtilsLib.Icons.NotificationIcons.Warning,
 			Time = tonumber(time) or 5
 		})
     elseif type == "error" then
-		OrionLib:MakeNotification({
+		UILibrary:MakeNotification({
 			Name = title or "[Utility] ERROR: ",
 			Content = tostring(message),
-			Image = UtilsLib.NotificationIcons.Error,
+			Image = UtilsLib.Icons.NotificationIcons.Error,
 			Time = tonumber(time) or 5
 		})
     end
@@ -168,10 +145,6 @@ function UtilsLib:GetExecutor()
     (IS_COCO_LOADED and "Coco") or
     ("Undetectable")
     return exploit
-end
-
-if not getgenv().isUtilsLibLive then 
-    getgenv().isUtilsLibLive = true
 end
 
 return UtilsLib;
