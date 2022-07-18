@@ -1,11 +1,19 @@
+if PlayerModule_LOADED then
+	return
+end
+
+pcall(function() getgenv().PlayerModule_LOADED = true end)
+
 local PlayerModule = {}
 
 -- // Variables
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local IYMouse = Players.LocalPlayer:GetMouse()
 
-if not getgenv().PlayerModule then
+if getgenv().PlayerModule == nil then
 	getgenv().PlayerModule = {
 		WalkSpeed = 16,
 		JumpPower = 50,
@@ -37,35 +45,41 @@ function getRoot(char)
 end
 
 local Noclipping = nil
-
-if ss.NoClip.Enabled then
-	Clip = false
-	wait(0.1)
-	local function NoclipLoop()
-		if Clip == false and LocalPlayer.Character ~= nil then
-			for _, child in pairs(LocalPlayer.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= floatName then
-							child.CanCollide = false
+function PlayerModule:NoClipToggle(Value)
+	if Value then
+		Clip = false
+		wait(0.1)
+		local function NoclipLoop()
+			if Clip == false and Players.LocalPlayer.Character ~= nil then
+				for _, child in pairs(Players.LocalPlayer.Character:GetDescendants()) do
+					if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= floatName then
+								child.CanCollide = false
+					end
 				end
 			end
 		end
+		Noclipping = game:GetService('RunService').Stepped:Connect(NoclipLoop)
+	else
+		if Noclipping then
+			Noclipping:Disconnect()
+		end
+		Clip = true
 	end
-	Noclipping = game:GetService('RunService').Stepped:Connect(NoclipLoop)
-else
-	if Noclipping then
-		Noclipping:Disconnect()
-	end
-	Clip = true
 end
 local floatName = randomString()
 
-if LocalPlayer.Character:FindFirstChildOfClass('Humanoid').UseJumpPower then
-	LocalPlayer.Character:FindFirstChildOfClass('Humanoid').JumpPower = ss.JumpPower
-else
-	LocalPlayer.Character:FindFirstChildOfClass('Humanoid').JumpHeight  = ss.JumpPower
+
+function PlayerModule:JumpPower(Value)
+	if Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').UseJumpPower then
+		Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').JumpPower = Value or ss.JumpPower
+	else
+		Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').JumpHeight  = Value or ss.JumpPower
+	end
 end
 
-LocalPlayer.Character:FindFirstChildOfClass('Humanoid').WalkSpeed = ss.WalkSpeed
+function PlayerModule:WalkSpeed(Value)
+	Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').WalkSpeed = Value or ss.WalkSpeed
+end
 
 FLYING = false
 QEfly = true
@@ -187,8 +201,8 @@ end
 function cNOFLY()
 	if CFloop then
 		CFloop:Disconnect()
-		LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
-		local Head = LocalPlayer.Character:WaitForChild("Head")
+		Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+		local Head = Players.LocalPlayer.Character:WaitForChild("Head")
 		Head.Anchored = false
 	end
 end
@@ -197,7 +211,7 @@ local flyjump
 function jFLY()
 	if flyjump then flyjump:Disconnect() end
 	flyjump = UserInputService.JumpRequest:Connect(function(Jump)
-		LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+		Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
 	end)
 end
 
@@ -205,44 +219,49 @@ function jNOFLY()
 	if flyjump then flyjump:Disconnect() end
 end
 
-if ss.Flying.Enabled then
-	if ss.Flying.Method == "Normal" then
-		NOFLY()
-		wait()
-		sFLY()
-	elseif ss.Flying.Method == "CFrame" then
-		cFLY(Players.LocalPlayer)
-	elseif ss.Flying.Method == "Jump" then
-		jFLY()
-	end
-else
-	if ss.Flying.Method == "Normal" then
-		NOFLY()
-	elseif ss.Flying.Method == "CFrame" then
-		cNOFLY()
-	elseif ss.Flying.Method == "Jump" then
-		jNOFLY()
+FlyMethod = "Normal"
+function PlayerModule:FlyMethod(method)
+	if method == "Normal" then
+		FlyMethod = method
+	elseif method == "CFrame" then
+		FlyMethod = method
+	elseif method == "Jump" then
+		FlyMethod = method
 	end
 end
 
-
--- // Functions
-function PlayerModule:Toggle(type)
-	if ss[type].Enabled == nil then
-		ss[type] = not ss[type]
+function PlayerModule:FlyToggle(Value)
+	if Value then
+		if FlyMethod == "Normal" then
+			NOFLY()
+			wait()
+			sFLY()
+		elseif FlyMethod == "CFrame" then
+			cFLY(Players.LocalPlayer)
+		elseif FlyMethod == "Jump" then
+			jFLY()
+		end
 	else
-		ss[type].Enabled = not ss[type].Enabled
+		if FlyMethod == "Normal" then
+			NOFLY()
+		elseif FlyMethod == "CFrame" then
+			cNOFLY()
+		elseif FlyMethod == "Jump" then
+			jNOFLY()
+		end
 	end
 end
 
-function PlayerModule:Get(type, option)
+PlayerModule.Functions = {}
+
+function PlayerModule.Functions:Get()
 	if type == "Other" then
 		return ss[option]
 	end
 	return ss[type][option]
 end
 
-function PlayerModule:Set(type, option, value)
+function PlayerModule.Functions:Set(type, option, value)
 	if type == "Other" then
 		ss[option] = value
 	end
