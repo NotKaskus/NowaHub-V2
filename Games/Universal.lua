@@ -1,9 +1,8 @@
 local orionRepo = 'https://raw.githubusercontent.com/shlexware/Orion/main/'
-local nowaRepo = 'https://raw.githubusercontent.com/NotKaskus/Nowa-Hub/main/'
 local nowaV2Repo = 'https://raw.githubusercontent.com/NotKaskus/NowaHub-V2/main/'
 
 local OrionLib = loadstring(game:HttpGet((orionRepo .. 'source')))()
-local EspLib = loadstring(game:HttpGet(nowaRepo .. 'Resources/Lib/UniversalEsp.lua'))()
+local EspLib = loadstring(game:HttpGet(nowaV2Repo .. 'Librarys/UniversalEsp.lua'))()
 local AimbotLib = loadstring(game:HttpGet(nowaV2Repo .. 'Librarys/UniversalAimbot.lua'))()
 local UtilsLib = loadstring(game:HttpGet(nowaV2Repo .. 'Librarys/UtilLib.lua'))()
 
@@ -31,6 +30,16 @@ local PlayerTab = Window:MakeTab({ Name = "Player", Icon = "rbxassetid://9792631
 local SettingsTab = Window:MakeTab({ Name = "Settings", Icon = "rbxassetid://9792633222", PremiumOnly = false })
 
 local AimbotSection = CombatTab:AddSection({ Name = "Aimbot" })
+
+AimbotLib:Set('FovCircle', 'Enabled', false)
+
+AimbotSection:AddToggle({
+	Name = "Toggle Aimbot",
+	Default = false,
+	Callback = function(Value)
+		AimbotLib:Set('Aimbot', 'Enabled', Value)
+	end    
+})
 
 AimbotSection:AddToggle({
 	Name = "Team Check",
@@ -353,6 +362,13 @@ local StatisticSection = SettingsTab:AddSection({ Name = "Statistics" })
 local FpsLabel = StatisticSection:AddLabel("...")
 local PingLabel = StatisticSection:AddLabel("...")
 local MemoryLabel = StatisticSection:AddLabel("...")
+
+UtilsLib:Try(UILibrary:MakeNotification({
+	Name = "Nowa Hub",
+	Content = "Hub Successfully Loaded! Enjoy Trolling Kids",
+	Image = UtilsLib.Icons.NotificationIcons.Informational,
+	Time = 7
+}),"Loader",true)
 
 local eva = true
 coroutine.wrap(function()
