@@ -1,0 +1,1 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NotKaskus/NowaHub-V2/main/MainFile.lua"))()
