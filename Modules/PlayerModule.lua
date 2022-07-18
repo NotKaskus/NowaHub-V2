@@ -219,19 +219,11 @@ function jNOFLY()
 	if flyjump then flyjump:Disconnect() end
 end
 
+FlyStatus = nil
 FlyMethod = "Normal"
-function PlayerModule:FlyMethod(method)
-	if method == "Normal" then
-		FlyMethod = method
-	elseif method == "CFrame" then
-		FlyMethod = method
-	elseif method == "Jump" then
-		FlyMethod = method
-	end
-end
-
 function PlayerModule:FlyToggle(Value)
 	if Value then
+		FlyStatus = true
 		if FlyMethod == "Normal" then
 			NOFLY()
 			wait()
@@ -242,6 +234,7 @@ function PlayerModule:FlyToggle(Value)
 			jFLY()
 		end
 	else
+		FlyStatus = false
 		if FlyMethod == "Normal" then
 			NOFLY()
 		elseif FlyMethod == "CFrame" then
@@ -249,6 +242,36 @@ function PlayerModule:FlyToggle(Value)
 		elseif FlyMethod == "Jump" then
 			jNOFLY()
 		end
+	end
+end
+
+function PlayerModule:FlyMethod(method)
+	if FlyStatus ~= nil and FlyStatus == true then
+		PlayerModule:FlyToggle(false)
+		if method == "Normal" then
+			FlyMethod = method
+		elseif method == "CFrame" then
+			FlyMethod = method
+		elseif method == "Jump" then
+			FlyMethod = method
+		end
+		wait(0.4)
+		PlayerModule:FlyToggle(true)
+	end
+	if method == "Normal" then
+		FlyMethod = method
+	elseif method == "CFrame" then
+		FlyMethod = method
+	elseif method == "Jump" then
+		FlyMethod = method
+	end
+end
+
+function PlayerModule:FlySpeed(Value)
+	if FlyMethod == "Normal" then
+		iyflyspeed = Value
+	elseif FlyMethod == "CFrame" then
+		CFspeed = Value
 	end
 end
 
