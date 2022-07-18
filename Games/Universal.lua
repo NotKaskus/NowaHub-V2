@@ -31,8 +31,6 @@ local SettingsTab = Window:MakeTab({ Name = "Settings", Icon = "rbxassetid://979
 
 local AimbotSection = CombatTab:AddSection({ Name = "Aimbot" })
 
-AimbotLib:Set('FovCircle', 'Enabled', false)
-
 AimbotSection:AddToggle({
 	Name = "Toggle Aimbot",
 	Default = false,
@@ -363,12 +361,18 @@ local FpsLabel = StatisticSection:AddLabel("...")
 local PingLabel = StatisticSection:AddLabel("...")
 local MemoryLabel = StatisticSection:AddLabel("...")
 
-UtilsLib:Try(UILibrary:MakeNotification({
-	Name = "Nowa Hub",
-	Content = "Hub Successfully Loaded! Enjoy Trolling Kids",
-	Image = UtilsLib.Icons.NotificationIcons.Informational,
-	Time = 7
-}),"Loader",true)
+local success, err = pcall(function()
+	UILibrary:MakeNotification({
+		Name = "Nowa Hub",
+		Content = "Hub Successfully Loaded! Enjoy Trolling Kids",
+		Image = UtilsLib.Icons.NotificationIcons.Informational,
+		Time = 7
+	})
+end)
+
+if not success and verbose then
+    UtilsLib:Log("error", string.format('NowaHub failed to run, Error: %s', err))
+end
 
 local eva = true
 coroutine.wrap(function()
